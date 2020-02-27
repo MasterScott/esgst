@@ -4364,6 +4364,38 @@ class Common extends Module {
     popup.open();
   }
 
+  createAsyncConfirmation(message) {
+    return new Promise((resolve, reject) => {
+      const popup = new Popup({ addScrollable: true, icon: 'fa-question', isTemp: true, title: message });
+      popup.description.appendChild(new ButtonSet({
+        color1: 'green',
+        color2: '',
+        icon1: 'fa-check',
+        icon2: '',
+        title1: 'Yes',
+        title2: '',
+        callback1: () => {
+          resolve();
+          popup.close();
+        },
+      }).set);
+      popup.description.appendChild(new ButtonSet({
+        color1: 'red',
+        color2: '',
+        icon1: 'fa-times',
+        icon2: '',
+        title1: 'No',
+        title2: '',
+        callback1: () => {
+          reject();
+          popup.close();
+        },
+      }).set);
+      popup.onCloseByUser = reject;
+      popup.open();
+    });
+  }
+
   createConfirmation(message, onYes, onNo, event) {
     //Logger.info(message);
     let callback, popup;
